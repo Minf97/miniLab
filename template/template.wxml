@@ -1,0 +1,11 @@
+<!-- 
+   template
+ -->
+
+<template name="labList_item">
+  <view class="labList_item" catchtap="{{item.click}}">
+    <image src="{{item.icon}}"></image>
+    <text>{{item.name}}</text>
+    <image src="{{right || '/pages/index/images/right.png'}}"></image>
+  </view>
+</template>

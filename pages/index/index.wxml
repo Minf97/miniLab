@@ -1,0 +1,38 @@
+<import src="../../template/template.wxml"></import>
+
+<view class="container">
+  <view class="schedule" 
+  style="height: {{labList.length * 120 + 200}}rpx;">
+    <!-- 课程表提醒标题 -->
+    <view class="remind">
+      <view class="remindLeft">
+        <text class="remindLeft-remind">实验室</text>
+        <text class="remindLeft-time" decode="{{true}}">
+          {{time.month+1}}.{{time.date}} &nbsp;&nbsp; 周{{time.day!==0 ? time.day : 7}}
+        </text>
+      </view>
+      <view class="remindRight" bindtap="setClass">
+        <text class="remindRight-text">课程表</text>
+      </view>
+    </view>
+    <!-- 分割线 -->
+    <view class="view_fengexian">
+      <view ></view>
+      <text class="text_fengexian">*实验室介绍*</text>
+      <view ></view>
+    </view>
+    <!-- 课程表内容 -->
+    <!-- <view class="classTable" wx:for="{{classListToday}}" wx:key='index'>
+      <view class="class">
+        <view class="classText">
+          {{item.name}}
+        </view>
+      </view>
+    </view> -->
+    <view class="lab">
+      <block wx:for="{{labList}}" wx:key="index">
+        <template is="labList_item" data="{{item,right:'images/right.png'}}"></template>
+      </block>
+    </view>
+  </view>
+</view>

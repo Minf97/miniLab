@@ -1,0 +1,67 @@
+@import "../../template/template.wxss";
+
+page {
+  background-color: rgb(246, 246, 246);
+}
+.container {
+  padding: 10rpx 10rpx;
+}
+.schedule {
+  width: 100%;
+  height: 300rpx;
+  background-color: #fff;
+  border-radius: 25rpx;
+}
+.remind {
+  display: flex;
+  justify-content: space-between;
+}
+.remindLeft {
+  margin: 30rpx 0 30rpx 30rpx;
+}
+.remindLeft-remind {
+  display:inline-block;
+  color: rgb(57, 137, 168);
+  font-size: 33rpx;
+}
+.remindLeft-time {
+  font-size: 28rpx;
+  color: #ccc;
+}
+.remindRight{
+  display: flex;
+  margin: 30rpx 40rpx ;
+  justify-content: center;
+  align-items: center;
+}
+.remindRight-text {
+  border: 4rpx solid rgb(172, 235, 227);
+  border-radius: 25rpx;
+  padding: 7rpx 10rpx;
+  font-size: 30rpx;
+  color: rgb(172, 235, 227);
+}
+/* 分割线 */
+.view_fengexian {
+  width: 96%;
+  height: 50rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0rpx 2% 0rpx 2%;
+}
+
+/* 两个view的样式 */
+.view_fengexian view {
+  width: 33%;
+  height: 2rpx;
+  background: linear-gradient(to right, #ead6ee, #a0f1ea);
+}
+
+/* 字体的样式 */
+.text_fengexian {
+  font-size: 25rpx;
+  color: rgb(57, 137, 168);
+  margin: 0rpx 2% 0rpx 2%;
+}

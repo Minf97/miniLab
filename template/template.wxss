@@ -1,0 +1,26 @@
+.labList_item{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   line-height: 120rpx;
+ }
+ .labList_item image:first-child{
+   width: 60rpx;
+   height: 60rpx;
+   padding: 0 10rpx 0 20rpx;
+}
+.labList_item text{
+  flex: 1;
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgb(106, 106, 106);
+  
+}
+.labList_item image:last-child{
+  width: 30rpx;
+  height: 30rpx;
+  padding: 0 20rpx;
+}

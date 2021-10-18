@@ -1,0 +1,58 @@
+<view class="container">
+   <!-- 头部 -->
+   <view class="header">
+      <view class="imgBtn" bindtap="lastWeek">
+         <image src="../../images/btn_prev@2x.png"/>
+      </view>
+      <text class="headerText">第{{weekNow}}周</text>
+      <view class="imgBtn" bindtap="nextWeek" >
+         <image src="../../images/btn_next@2x.png"/>
+      </view>
+   </view>
+   <!-- 滑块 -->
+   <view bindtouchstart="touchStart"  bindtouchmove="touchMove" bindtouchend="touchEnd" >
+      <scroll-view class="scroll">
+         <!-- 课表 - 星期时间 - 横列 -->
+         <view class="scrollTop">
+            <!-- 月份 -->
+            <view class="month">
+               {{startTime.month}}月
+            </view>
+            <!-- 星期一 -->
+            <view class="weekText">
+               <view>周一</view>
+               <view class="weekTextTime">{{startTime.month}}/{{startTime.Monday}}</view>
+            </view>
+            <!-- 周二~周日 -->
+            <view wx:for="{{['二','三','四','五','六','日']}}" wx:key="index" class="weekText">
+               <view>周{{item}}</view>
+               <view class="{{arr.month[index] == time.month && arr.date[index] == time.date ? 'weekTextTimeHighLight' : 'weekTextTime'}} ">{{arr.month[index]}}/{{arr.date[index]}}</view>
+            </view>
+         </view>
+
+
+         <!-- 页面主体内容 -->
+         <view class="body">
+            <!-- 左侧时间轴 -->
+            <view class="timeTable">
+               <!-- 课表序数 -->
+               <view wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="unique" class="timeNum">
+                  <view>{{item}}</view>
+                  <view class="timeClass">{{courseTime[index]}}</view>
+               </view>
+            </view>
+            <!-- 课表 -->
+            <view  class="scheduleContain">
+               <view wx:for="{{classList}}" wx:key="index" class="schedule"  data-page="{{item.page}}"
+               data-width="{{item.idWidth}}"
+               data-height="{{item.idHighth}}"
+               bindtap="isSelected"
+               style="top:{{(item.idHighth-1)*220}}rpx; left:{{(item.idWidth-1)*100}}rpx; background-color:{{isSelected ? bgc : 'rgb(231, 227, 227)'}}; "
+               >
+                  <view class="scheduleInfo" wx:if="{{item.isSelected}}">{{bgc}}</view>
+               </view>
+            </view>
+         </view>
+      </scroll-view>
+   </view>
+</view>

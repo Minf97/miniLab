@@ -1,0 +1,98 @@
+/* pages/Schedule.wxss */
+.container {
+   padding: 0;
+}
+.header {
+   display: flex;
+   justify-content: center;
+   width: 100vw;
+   border-bottom: 2rpx solid #ccc;
+   text-align: center;
+   padding: 10rpx 0;
+}
+.header text {
+   margin: 0 50rpx;
+}
+
+.imgBtn image {
+   display: inline-block;
+   width: 25rpx;
+   height: 30rpx;
+   margin-top: 5rpx;
+}
+/* 顶部时间轴 */
+.scrollTop {
+   display: flex;
+   justify-content: space-between;
+   text-align: center;
+   border: 1rpx solid rgb(245, 244, 244);
+   padding-bottom: 10rpx;
+}
+.month {
+   display: flex;
+   justify-content: center;
+   text-align: center;
+   align-items: center;
+   width: 50rpx;
+   font-size: 30rpx;
+   color: grey;
+}
+.weekText {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+   width: 100rpx;
+   font-size: 28rpx;
+}
+.weekTextTime {
+   color: grey;
+   font-size: 23rpx;
+}
+.weekTextTimeHighLight {
+   color: #73b4ef;
+   font-size: 23rpx;
+   font-weight: bold;
+}
+/* 页面主体内容 */
+.body {
+   position: relative;
+   display: flex;
+   justify-content: space-between;
+}
+/* 课表左侧时间轴 */
+.timeTable {
+   width: 55rpx;
+}
+.timeNum {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   width: 50rpx;
+   height: 110rpx;
+   font-size: 28rpx;
+   color: #4d4d4d;
+}
+.timeClass {
+   font-size: 20rpx;
+   color: rgb(180, 178, 178);
+}
+/* 课表 */
+.scheduleContain {
+   position: relative;
+   width: 700rpx;
+   height: 1100rpx;
+   margin: 7rpx 0;
+}
+.schedule {
+   position: absolute;
+   display: flex;
+   width: 96rpx;
+   height: 213rpx;
+   border-radius: 15rpx;
+   margin: 5rpx 0 5rpx 0;
+   align-items: center;
+   justify-content: center;
+}

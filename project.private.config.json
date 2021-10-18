@@ -1,0 +1,23 @@
+{
+   "condition": {
+      "plugin": {
+         "list": []
+      },
+      "game": {
+         "list": []
+      },
+      "gamePlugin": {
+         "list": []
+      },
+      "miniprogram": {
+         "list": [
+            {
+               "name": "pages/schedule/schedule",
+               "pathName": "pages/schedule/schedule",
+               "query": "",
+               "scene": null
+            }
+         ]
+      }
+   }
+}

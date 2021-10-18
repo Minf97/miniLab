@@ -1,0 +1,16 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/schedule/schedule",
+    "pages/logs/logs"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "占课小程序",
+    "navigationBarTextStyle":"black"
+  },
+  
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
