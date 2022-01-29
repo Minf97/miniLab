@@ -1,0 +1,7 @@
+<import src="../../template/template.wxml"></import>
+
+<view class="lab">
+   <block wx:for="{{labList}}" wx:key="index">
+      <template is="labList_item" data="{{item,right:'images/right.png'}}"></template>
+   </block>
+</view>

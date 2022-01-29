@@ -1,0 +1,22 @@
+{
+  "name": "code",
+  "version": "1.0.0",
+  "description": "> 功能：\r >\r > 1. 可视化课表，可见当天教室占用情况；\r >\r > 2. 点击即可轻松占课\r >\r > 缺陷：\r >\r > 1. 界面未美化\r > 2. 细节未优化\r > 3. **纯前端，暂时无法上线**",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Minf97/MiniPrograme.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Minf97/MiniPrograme/issues"
+  },
+  "homepage": "https://github.com/Minf97/MiniPrograme#readme",
+  "dependencies": {
+    "@vant/weapp": "^1.9.1"
+  }
+}
