@@ -2,15 +2,34 @@
   "pages":[
     "pages/index/index",
     "pages/schedule/schedule",
+    "pages/introLab/introLab",
+    "pages/introProject/introProject",
+    "pages/interview/interview",
     "pages/logs/logs"
   ],
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "占课小程序",
+    "navigationBarTitleText": "实验室小程序",
     "navigationBarTextStyle":"black"
   },
-  
-  "style": "v2",
+  "tabBar": {
+    "backgroundColor": "#F6F6F6",
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "首页",
+      "iconPath": "images/tabbar/home.png",
+      "selectedIconPath": "/images/tabbar/home -after.png"
+    },{
+      "pagePath": "pages/interview/interview",
+      "text": "在线预约",
+      "iconPath": "./images/tabbar/namecard.png",
+      "selectedIconPath": "./images/tabbar/namecard-after.png"
+    }]
+  },
+  "usingComponents": {
+    "van-icon":"@vant/weapp/icon/index",
+    "van-toast": "@vant/weapp/toast/index"
+  },
   "sitemapLocation": "sitemap.json"
 }

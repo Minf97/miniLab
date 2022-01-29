@@ -3,6 +3,7 @@
    padding: 0;
 }
 .header {
+   position: relative;
    display: flex;
    justify-content: center;
    width: 100vw;
@@ -19,6 +20,13 @@
    width: 25rpx;
    height: 30rpx;
    margin-top: 5rpx;
+}
+.editor {
+   position: absolute;
+   top: 0;
+   right: 30rpx;
+   width: 50rpx;
+   height: 50rpx;
 }
 /* 顶部时间轴 */
 .scrollTop {
@@ -89,10 +97,27 @@
 .schedule {
    position: absolute;
    display: flex;
+   float: left;
    width: 96rpx;
    height: 213rpx;
    border-radius: 15rpx;
    margin: 5rpx 0 5rpx 0;
+   background-color: rgb(231, 227, 227);
+}
+/* 需要渲染上去的课表  */
+.schedule1 {
+   display: flex;
    align-items: center;
    justify-content: center;
+   position: absolute;
+   width: 96rpx;
+   height: 213rpx;
+   border-radius: 15rpx;
+   margin: 5rpx 0 5rpx 0;
 }
+.scheduleInfo {
+   font-size: 25rpx;
+   color: #fff;
+   text-align: center;
+}
+

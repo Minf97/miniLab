@@ -8,6 +8,10 @@
       <view class="imgBtn" bindtap="nextWeek" >
          <image src="../../images/btn_next@2x.png"/>
       </view>
+      <!-- 是否进入编辑模式 -->
+      <view class="editor" catchtap="isEdit">
+         <van-icon name="setting" color="#99CCFF" size="50rpx"/>
+      </view>
    </view>
    <!-- 滑块 -->
    <view bindtouchstart="touchStart"  bindtouchmove="touchMove" bindtouchend="touchEnd" >
@@ -16,20 +20,14 @@
          <view class="scrollTop">
             <!-- 月份 -->
             <view class="month">
-               {{startTime.month}}月
+               {{arr.month[0]}}月
             </view>
-            <!-- 星期一 -->
-            <view class="weekText">
-               <view>周一</view>
-               <view class="weekTextTime">{{startTime.month}}/{{startTime.Monday}}</view>
-            </view>
-            <!-- 周二~周日 -->
-            <view wx:for="{{['二','三','四','五','六','日']}}" wx:key="index" class="weekText">
+            <!-- 周一~周日 -->
+            <view wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="index" class="weekText">
                <view>周{{item}}</view>
                <view class="{{arr.month[index] == time.month && arr.date[index] == time.date ? 'weekTextTimeHighLight' : 'weekTextTime'}} ">{{arr.month[index]}}/{{arr.date[index]}}</view>
             </view>
          </view>
-
 
          <!-- 页面主体内容 -->
          <view class="body">
@@ -42,15 +40,35 @@
                </view>
             </view>
             <!-- 课表 -->
-            <view  class="scheduleContain">
-               <view wx:for="{{classList}}" wx:key="index" class="schedule"  data-page="{{item.page}}"
-               data-width="{{item.idWidth}}"
-               data-height="{{item.idHighth}}"
-               bindtap="isSelected"
-               style="top:{{(item.idHighth-1)*220}}rpx; left:{{(item.idWidth-1)*100}}rpx; background-color:{{isSelected ? bgc : 'rgb(231, 227, 227)'}}; "
-               >
-                  <view class="scheduleInfo" wx:if="{{item.isSelected}}">{{bgc}}</view>
-               </view>
+            <view  class="scheduleContain" >
+               <!-- 编辑模式下 -->
+               <block wx:if="{{editing}}">
+                  <block class="schedule_row" wx:for="{{[0,1,2,3,4]}}" wx:for-item="i" wx:key="index">
+                     <block class="schedule_line" wx:for="{{[0,1,2,3,4,5,6]}}" wx:for-item="j" wx:key="item">
+                        <view class="schedule"
+                        data-height="{{i+1}}"
+                        data-width="{{j+1}}"
+                        style="top: {{i*220}}rpx; left: {{j*100}}rpx;"
+                        catchtap="arrange"
+                        ></view>
+                     </block>
+                  </block>
+               </block>
+
+               <!-- 需要渲染上去的课表 -->
+               <block wx:for="{{schedule}}" wx:key="item1">
+                  <view class="schedule1" 
+                  wx:if="{{item.page === weekNow}}"
+                  data-height="{{item.height}}"
+                  data-width="{{item.width}}"
+                  style="left: {{(item.width-1)*100}}rpx; top: {{(item.height-1)*220}}rpx; background-color: {{colorArrays[index]}};"
+                  catchtap="excelClass">
+                     <view class="scheduleInfo">
+                     <text wx:if="{{item.page == weekNow}}"> 123 </text>
+                        <open-data type="userNickName"></open-data>
+                     </view>
+                  </view>
+               </block>
             </view>
          </view>
       </scroll-view>

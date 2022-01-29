@@ -1,38 +1,75 @@
-<import src="../../template/template.wxml"></import>
+<import src="../../template/template"></import>
+
 
 <view class="container">
+  <!-- 滑动栏 -->
+  <view class="scroll1">
+    <scroll-view class="scroll" scroll-x="true" bindscroll="scroll" >
+      <view class="scrollContain">
+        <block wx:for="{{scrollItem}}" wx:key="item">
+          <view class="scroll_item" catchtap="{{item.click}}">
+            <image src="{{item.icon}}"></image>
+            <text>{{item.text}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+    <!-- 模拟进度条 -->
+    <view class="slider" wx:if="{{hasSlider}}">
+      <view class="slider-inside slider-inside-location" style="left:{{left}}"></view>
+    </view>
+  </view>
+  <van-toast id="van-toast" />
+
+  <!-- 通知栏 -->
+  <view class="inform">
+    <van-icon name="bars" />
+    <swiper class="informContain"
+    autoplay='true' 
+    interval='3800' 
+    duration='1000' 
+    circular='true' 
+    vertical='true'>
+      <block wx:for="{{inform}}" wx:key="id">
+        <swiper-item>
+            <text>{{item}}</text>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+
+  <!-- 课程表 -->
   <view class="schedule" 
-  style="height: {{labList.length * 120 + 200}}rpx;">
+  style="height: {{schedule.length * 110 + 200}}rpx;">
     <!-- 课程表提醒标题 -->
     <view class="remind">
       <view class="remindLeft">
         <text class="remindLeft-remind">实验室</text>
         <text class="remindLeft-time" decode="{{true}}">
-          {{time.month+1}}.{{time.date}} &nbsp;&nbsp; 周{{time.day!==0 ? time.day : 7}}
+          {{time.month}}.{{time.date}} &nbsp;&nbsp; 周{{time.day!==0 ? time.day : 7}}
         </text>
       </view>
-      <view class="remindRight" bindtap="setClass">
+      <view class="remindRight" bindtap="goToInterview">
         <text class="remindRight-text">课程表</text>
       </view>
     </view>
     <!-- 分割线 -->
     <view class="view_fengexian">
       <view ></view>
-      <text class="text_fengexian">*实验室介绍*</text>
+      <text class="text_fengexian">*实验室排课*</text>
       <view ></view>
     </view>
     <!-- 课程表内容 -->
-    <!-- <view class="classTable" wx:for="{{classListToday}}" wx:key='index'>
-      <view class="class">
-        <view class="classText">
-          {{item.name}}
-        </view>
+    <view class="labClass_item" wx:for="{{schedule}}" wx:key="item">
+      <view class="firstchild">
+        <text >{{item.date == today ? "今天" : item.date}}</text>
+        <text>第{{item.height*2 -1}}节</text>
       </view>
-    </view> -->
-    <view class="lab">
-      <block wx:for="{{labList}}" wx:key="index">
-        <template is="labList_item" data="{{item,right:'images/right.png'}}"></template>
-      </block>
+
+      <view class="secondchild">
+        <text>{{item.title}}</text>
+        <view><van-icon name="location" />{{item.index}}</view>
+      </view>
     </view>
   </view>
 </view>

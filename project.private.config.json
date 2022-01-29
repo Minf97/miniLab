@@ -1,23 +1,42 @@
 {
-   "condition": {
-      "plugin": {
-         "list": []
-      },
-      "game": {
-         "list": []
-      },
-      "gamePlugin": {
-         "list": []
-      },
-      "miniprogram": {
-         "list": [
-            {
-               "name": "pages/schedule/schedule",
-               "pathName": "pages/schedule/schedule",
-               "query": "",
-               "scene": null
-            }
-         ]
-      }
-   }
+    "setting": {},
+    "condition": {
+        "plugin": {
+            "list": []
+        },
+        "game": {
+            "list": []
+        },
+        "gamePlugin": {
+            "list": []
+        },
+        "miniprogram": {
+            "list": [
+                {
+                    "name": "pages/schedule/schedule",
+                    "pathName": "pages/schedule/schedule",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "interview",
+                    "pathName": "pages/interview/interview",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "index",
+                    "pathName": "pages/index/index",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "logs",
+                    "pathName": "pages/logs/logs",
+                    "query": "",
+                    "scene": null
+                }
+            ]
+        }
+    }
 }

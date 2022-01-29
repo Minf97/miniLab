@@ -1,74 +1,84 @@
 {
-   "description": "项目配置文件",
-   "packOptions": {
-      "ignore": []
-   },
-   "setting": {
-      "urlCheck": true,
-      "es6": true,
-      "enhance": true,
-      "postcss": true,
-      "preloadBackgroundData": false,
-      "minified": true,
-      "newFeature": false,
-      "coverView": true,
-      "nodeModules": false,
-      "autoAudits": false,
-      "showShadowRootInWxmlPanel": true,
-      "scopeDataCheck": false,
-      "uglifyFileName": false,
-      "checkInvalidKey": true,
-      "checkSiteMap": true,
-      "uploadWithSourceMap": true,
-      "compileHotReLoad": false,
-      "lazyloadPlaceholderEnable": false,
-      "useMultiFrameRuntime": true,
-      "useApiHook": true,
-      "useApiHostProcess": true,
-      "babelSetting": {
-         "ignore": [],
-         "disablePlugins": [],
-         "outputPath": ""
-      },
-      "enableEngineNative": false,
-      "useIsolateContext": true,
-      "userConfirmedBundleSwitch": false,
-      "packNpmManually": false,
-      "packNpmRelationList": [],
-      "minifyWXSS": true,
-      "showES6CompileOption": false
-   },
-   "compileType": "miniprogram",
-   "libVersion": "2.19.4",
-   "appid": "wx2e8c3a90f8139c65",
-   "projectname": "mp-demo",
-   "debugOptions": {
-      "hidedInDevtools": []
-   },
-   "scripts": {},
-   "staticServerOptions": {
-      "baseURL": "",
-      "servePath": ""
-   },
-   "isGameTourist": false,
-   "condition": {
-      "search": {
-         "list": []
-      },
-      "conversation": {
-         "list": []
-      },
-      "game": {
-         "list": []
-      },
-      "plugin": {
-         "list": []
-      },
-      "gamePlugin": {
-         "list": []
-      },
-      "miniprogram": {
-         "list": []
-      }
-   }
+    "cloudfunctionRoot": "cloud/",
+    "description": "项目配置文件",
+    "packOptions": {
+        "ignore": []
+    },
+    "setting": {
+        "urlCheck": true,
+        "es6": true,
+        "enhance": true,
+        "postcss": true,
+        "preloadBackgroundData": false,
+        "minified": true,
+        "newFeature": false,
+        "coverView": true,
+        "nodeModules": true,
+        "autoAudits": false,
+        "showShadowRootInWxmlPanel": true,
+        "scopeDataCheck": false,
+        "uglifyFileName": false,
+        "checkInvalidKey": true,
+        "checkSiteMap": true,
+        "uploadWithSourceMap": true,
+        "compileHotReLoad": false,
+        "lazyloadPlaceholderEnable": false,
+        "useMultiFrameRuntime": true,
+        "useApiHook": true,
+        "useApiHostProcess": true,
+        "babelSetting": {
+            "ignore": [],
+            "disablePlugins": [],
+            "outputPath": ""
+        },
+        "enableEngineNative": false,
+        "useIsolateContext": true,
+        "userConfirmedBundleSwitch": false,
+        "packNpmManually": true,
+        "packNpmRelationList": [
+            {
+                "packageJsonPath": "./package.json",
+                "miniprogramNpmDistDir": "./"
+            }
+        ],
+        "minifyWXSS": true,
+        "disableUseStrict": false,
+        "showES6CompileOption": false,
+        "useCompilerPlugins": false,
+        "minifyWXML": true
+    },
+    "compileType": "miniprogram",
+    "libVersion": "2.19.4",
+    "appid": "wxa531121c204a813d",
+    "projectname": "%E5%AE%9E%E9%AA%8C%E5%AE%A4%E5%B0%8F%E7%A8%8B%E5%BA%8F",
+    "debugOptions": {
+        "hidedInDevtools": []
+    },
+    "scripts": {},
+    "staticServerOptions": {
+        "baseURL": "",
+        "servePath": ""
+    },
+    "isGameTourist": false,
+    "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+    "condition": {
+        "search": {
+            "list": []
+        },
+        "conversation": {
+            "list": []
+        },
+        "game": {
+            "list": []
+        },
+        "plugin": {
+            "list": []
+        },
+        "gamePlugin": {
+            "list": []
+        },
+        "miniprogram": {
+            "list": []
+        }
+    }
 }
