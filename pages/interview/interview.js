@@ -1,26 +1,36 @@
-// pages/interview/interview.js
+
+// 获取应用实例
 const app = getApp()
+// 数据库初始化
+wx.cloud.init()
+const db = wx.cloud.database()
+
 Page({
    data: {
-      labList:[]
+      labList:[
+         {
+           name: "嵌入式实验室",
+           icon: "images/soft.png",
+           place: "主教D808",
+           click:"lab808"
+         },{
+           name: "智慧农业实验室",
+           icon: "images/electric.png",
+           place: "主教D901",
+           click: "lab901"
+         }
+       ]
    },
-   lab808(e){
+   goToPage(e) {
+      let name = e.currentTarget.dataset.name;
+      let place = e.currentTarget.dataset.place;
+
       wx.navigateTo({
-        url: '../schedule/schedule?labTitle=嵌入式实验室',
+        url: `../schedule/schedule?name=${name}&place=${place}`,
       })
    },
-   lab901(e){
-      wx.navigateTo({
-        url: '../schedule/schedule?labTitle=智慧农业实验室',
-      })
-   },
-   /**
-    * 生命周期函数--监听页面加载
-    */
+
    onLoad: function (options) {
-      this.setData({
-         labList:app.globalData.labList
-      })
-      console.log(app.globalData.labList);
+      // db.collection('')
    },
 })

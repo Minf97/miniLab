@@ -22,24 +22,8 @@ App({
     classList:[],
     userInfo:{},
     labData:[],
-    labList:[
-      {
-        name: "嵌入式实验室",
-        icon: "images/soft.png",
-        place: "主教D808",
-        click:"lab808"
-      },{
-        name: "智慧农业实验室",
-        icon: "images/electric.png",
-        place: "主教D901",
-        click: "lab901"
-      }
-    ],
+    
     labClass_item:[],
 
-    // 新：
-    scheduleAll:[],
-    // 三日课表
-    schedule:[]
   }
 })

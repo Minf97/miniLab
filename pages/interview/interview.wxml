@@ -1,7 +1,12 @@
-<import src="../../template/template.wxml"></import>
 
 <view class="lab">
    <block wx:for="{{labList}}" wx:key="index">
-      <template is="labList_item" data="{{item,right:'images/right.png'}}"></template>
+      <view class="labList_item" catchtap="goToPage" 
+      data-name="{{item.name}}"
+      data-place="{{item.place}}">
+         <image src="{{item.icon}}"></image>
+         <text>{{item.name}}</text>
+         <image src="{{down || '/pages/index/images/right.png'}}"></image>
+      </view>
    </block>
 </view>

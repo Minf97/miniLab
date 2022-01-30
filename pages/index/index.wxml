@@ -1,5 +1,3 @@
-<import src="../../template/template"></import>
-
 
 <view class="container">
   <!-- 滑动栏 -->

@@ -2,10 +2,7 @@
   "pages":[
     "pages/index/index",
     "pages/schedule/schedule",
-    "pages/introLab/introLab",
-    "pages/introProject/introProject",
-    "pages/interview/interview",
-    "pages/logs/logs"
+    "pages/interview/interview"
   ],
   "window":{
     "backgroundTextStyle":"light",

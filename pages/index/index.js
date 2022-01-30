@@ -27,25 +27,23 @@ Page({
   },
 
 
-  // 1.获取信息函数
+  // 1.获取数据库信息函数
   getIndexInfo(){
     // 1.1请求数据库获取index集合内数据
     db.collection('index').get().then(res => {
       this.setData({
-        inform:res.data[0].inform,
-        scrollItem:res.data[0].scrollItem
+        inform:res.data[0].inform,          // 通知栏内容
       });
-      console.log('index数据库请求成功',res.data);
+      wx.setStorageSync('inform', res.data[0].inform)
     }).catch(console.error)
+
     // 1.2请求数据库获取schedule集合内数据（课表）
     db.collection('schedule').get().then(res => {
       this.setData({
         scheduleAll:res.data
       });
-      app.globalData.scheduleAll = res.data;
-      console.log("scheduleAll数据库请求成功",res.data);
-      // 处理课表信息函数 解决(异步非阻塞调用与同步)顺序问题
-      this.handleSchedule(res.data);
+      wx.setStorageSync('scheduleAll', res.data)
+      console.log("scheduleAll数据库请求成功", res.data);
     }).catch(console.error)
   },
   // 2.跳转页面函数
@@ -60,7 +58,8 @@ Page({
     })
   },
   // 3.处理课表信息函数
-  handleSchedule(scheduleAll){
+  handleSchedule(){
+    const scheduleAll = wx.getStorageSync('scheduleAll');
     const schedule = this.data.schedule;
     const time = this.data.time;
     // 处理加工变量
@@ -71,20 +70,17 @@ Page({
       today:today
     })
     // 遍历总课表，得到近三日课表
-    for(let i =0; i < scheduleAll.length; i++){
-      if(scheduleAll[i].date == today || scheduleAll[i].date == tomorrow || scheduleAll[i].date == nextTomorrow){
-        schedule.push(scheduleAll[i])
-      }
-    }
-    console.log("计算得到三日课表啦",schedule);
-    // 对三日课表排序  -> width 也代表星期几
+    scheduleAll.map(item => {
+      item.date == today ||
+      item.date == tomorrow ||
+      item.date == nextTomorrow ? schedule.push(scheduleAll[i]) : ''
+    })
+    // 对三日课表排序  -> width 代表星期几
     schedule.sort(this.compare('width'))
     // 处理完毕，将结果赋值回去
     this.setData({
       schedule:schedule
     })
-    app.globalData.schedule = schedule
-    console.log("setData三日课表啦",this.data.schedule);
   },
   // 3.1数组对象排序用的函数 配合sort使用
   compare(property){
@@ -95,42 +91,56 @@ Page({
     }
   },
   // 4.金刚区逻辑
-  scroll(event){
-    let scrollLeft = event.detail.scrollLeft + 375;
-    let scrllWidth = event.detail.scrollWidth;
-    let left;
-    if(scrollLeft < 395){
-      left = `65.625%`
-    }else{
-      left = `${(scrollLeft) / scrllWidth * 100}%`
-    }
-    this.setData({
-      left, //模拟滑块滑动 根据css设置 距离左边的百分比
-    })
-  },
+  // scroll(event){
+  //   let scrollLeft = event.detail.scrollLeft + 375;
+  //   let scrllWidth = event.detail.scrollWidth;
+  //   let left;
+  //   if(scrollLeft < 395){
+  //     left = `65.625%`
+  //   }else{
+  //     left = `${(scrollLeft) / scrllWidth * 100}%`
+  //   }
+  //   this.setData({
+  //     left, //模拟滑块滑动 根据css设置 距离左边的百分比
+  //   })
+  // },
   // 4.1判断滑块
-  judgeHasSlider(){
-    if(this.data.scrollItem.length > 8){
-      this.setData({
-        hasSlider:true
-      })
-    } 
-  },
+  // judgeHasSlider(){
+  //   if(this.data.scrollItem.length > 8){
+  //     this.setData({
+  //       hasSlider:true
+  //     })
+  //   } 
+  // },
+
   onLoad: function (options) {
-    // 获取所有信息
-    this.getIndexInfo();
+    if(!wx.getStorageSync('scheduleAll') || []) {
+      // 获取数据库信息函数
+      this.getIndexInfo();
+      // 处理课表信息函数
+      this.handleSchedule();
+    }
     // 判断金刚区滑块隐藏与显示
-    this.judgeHasSlider();
+    // this.judgeHasSlider();
     Toast.loading({
       message: '加载中...',
       forbidClick: true,
-      duration:100
+      duration:500
     });
   },
-  /**
-   * 用户点击右上角分享
-   */
+  onPullDownRefresh() {
+    let that = this;
+
+    wx.showNavigationBarLoading();  // 在标题栏中显示加载
+    setTimeout( function() {
+      that.onLoad()
+      wx.hideNavigationBarLoading() // 完成停止加载
+      wx.stopPullDownRefresh()      // 停止下拉刷新
+    },1000);
+  },
   onShareAppMessage: function () {
-    
+    return {
+      title: 'WE校园',
+    }
   },
 })

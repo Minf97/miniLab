@@ -35,6 +35,12 @@
                     "pathName": "pages/logs/logs",
                     "query": "",
                     "scene": null
+                },
+                {
+                    "name": "interview",
+                    "pathName": "pages/interview/interview",
+                    "query": "",
+                    "scene": null
                 }
             ]
         }
