@@ -9,7 +9,7 @@
          <image src="../../images/btn_next@2x.png"/>
       </view>
       <!-- 是否进入编辑模式 -->
-      <view class="editor" catchtap="isEdit">
+      <view class="editor" catchtap="{{modulee.isEdit}}">
          <van-icon name="setting" color="#99CCFF" size="50rpx"/>
       </view>
       <view class="addTo" catchtap="addViewOpen">
@@ -18,7 +18,7 @@
    </view>
    <!-- 添加课表 -->
    <view class="viewCover" hidden="{{addClass}}">
-      <view class="addToClassView">
+      <view class="addToClassView" animation="{{addToClassView}}">
          <form bindsubmit="addViewSubmmit">
             <view class="addClassTitle">课程详情</view>
             <view class="classMsgBox" wx:for="{{classMsg}}" wx:key='index'>

@@ -1,3 +1,4 @@
+const util = require("../../utils/util");
 
 const app = getApp()
 var startX, endX;
@@ -77,93 +78,102 @@ Page({
     
   },
   // 1.控制时间的总函数
-  InitTime(){
-    this.InitStartTime();
-    this.getWeekNow();
-    this.linkWeekAndTime(this.data.weekNow);
-  },
-  InitStartTime(){                         // 初始化每学期起始时间
-    const time = this.data.time;
+  InitTime () {
+
+    // 初始化每学期起始时间
+    const InitStartTime = () => {
+      const time = this.data.time;
     
-    if(time.month >= 8 || (time.month <= 1 && time.date <= 20)){  // 上学期
-      this.setData({
-        startTime:time.year + "-8-30"
-      })
-    }else {                                                       // 下学期
-      this.setData({
-        startTime:time.year + "-2-28"
-      })
-    };
-    // console.log(this.data.startTime,"初始化学期起始时间")
-  },
-  dateDiff:function(sDate1,sDate2){        // 计算时间天数差 （不动）
-    // sDate1 和 sDate2 必须是2021-8-30格式
-    var aDate, oDate1, oDate2, iDays
-    aDate = sDate1.split("-")
-    // 转换为 8-30-2021 的形式
-    oDate1 = new Date(aDate[1] + '-' + aDate[2] + "-" + aDate[0])
-    aDate = sDate2.split("-")
-    oDate2 = new Date(aDate[1] + '-' + aDate[2] + "-" + aDate[0])
-
-    if(oDate2 < oDate1) {
-      // 如果当前时间小于初始化时间
-      return 1
-    }else {
-      // 把相差的毫秒数转换为天数
-      iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 /60 /60 /24);
-      return iDays;
+      if(time.month >= 8 || (time.month <= 1 && time.date <= 20)){  // 上学期
+        this.setData({
+          startTime:time.year + "-8-30"
+        })
+      }else {                                                       // 下学期
+        this.setData({
+          startTime:time.year + "-2-28"
+        })
+      };
+      // console.log(this.data.startTime,"初始化学期起始时间")
     }
-  },
-  getWeekNow:function(){                   // 得到weekNow 
-    const time = this.data.time
-    time.day == 0 ? 7 : time.day
-    this.setData({
-      time:time
-    })
-    const sDate1 = this.data.startTime     // 起始时间
-    const sDate2 = time.year + "-" + time.month + "-" + time.date
 
-    var daysUntilNow = this.dateDiff(sDate1,sDate2);       // 计算天数差
-    (daysUntilNow/7)%1 == 0 ? daysUntilNow += 1 : '';      // 解决每周一还停留在上一周的BUG
-    this.setData({
-      weekNow:Math.ceil(daysUntilNow / 7)  // 向上取整，有小数就加一
-    })
-    console.log(this.data.weekNow,"计算出weekNow啦");
-  },
-  linkWeekAndTime:function(weekNow){       // 将时间startTime与weekNow连接起来
-    // Date(year,month,date)  
-    // Date(2021,7,31)    返回出来是 2021年8月31号 
-    // Date(2021,7,30+10) 返回出来是 距离2021年8月30号过去十天后的日期
-    const startTime = this.data.startTime.split("-");
-    const weekMonday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) + (weekNow-1)*7);
-    const weekTuesday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +1 + (weekNow-1)*7);
-    const weekWednesday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +2 + (weekNow-1)*7);
-    const weekThursday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +3 + (weekNow-1)*7);
-    const weekFriday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +4 + (weekNow-1)*7);
-    const weekSaturday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +5 + (weekNow-1)*7);
-    const weekSunday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +6 + (weekNow-1)*7);
-    this.setData({
-      arr:{
-        month:[
-          weekMonday.getMonth()+1,
-          weekTuesday.getMonth()+1,
-          weekWednesday.getMonth()+1,
-          weekThursday.getMonth()+1,
-          weekFriday.getMonth()+1,
-          weekSaturday.getMonth()+1,
-          weekSunday.getMonth()+1,
-        ],
-        date:[
-          weekMonday.getDate(),
-          weekTuesday.getDate(),
-          weekWednesday.getDate(),
-          weekThursday.getDate(),
-          weekFriday.getDate(),
-          weekSaturday.getDate(),
-          weekSunday.getDate(),
-        ],
-      },
-    })
+    // 计算时间天数差 （不动）
+    const dateDiff = (sDate1,sDate2) => {
+      // sDate1 和 sDate2 必须是2021-8-30格式
+      var aDate, oDate1, oDate2, iDays
+      aDate = sDate1.split("-")
+      // 转换为 8-30-2021 的形式
+      oDate1 = new Date(aDate[1] + '-' + aDate[2] + "-" + aDate[0])
+      aDate = sDate2.split("-")
+      oDate2 = new Date(aDate[1] + '-' + aDate[2] + "-" + aDate[0])
+
+      if(oDate2 < oDate1) {
+        // 如果当前时间小于初始化时间
+        return 1
+      }else {
+        // 把相差的毫秒数转换为天数
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 /60 /60 /24);
+        return iDays;
+      }
+    }
+
+    // 得到weekNow 
+    const getWeekNow = () => {
+      const time = this.data.time
+      time.day == 0 ? 7 : time.day
+      this.setData({
+        time:time
+      })
+      const sDate1 = this.data.startTime     // 起始时间
+      const sDate2 = time.year + "-" + time.month + "-" + time.date
+
+      var daysUntilNow = dateDiff(sDate1,sDate2);       // 计算天数差
+      (daysUntilNow/7)%1 == 0 ? daysUntilNow += 1 : '';      // 解决每周一还停留在上一周的BUG
+      this.setData({
+        weekNow:Math.ceil(daysUntilNow / 7)  // 向上取整，有小数就加一
+      })
+      console.log(this.data.weekNow,"计算出weekNow啦");
+    }
+
+    // 将时间startTime与weekNow连接起来
+    const linkWeekAndTime = (weekNow) => {
+      // Date(year,month,date)  
+      // Date(2021,7,31)    返回出来是 2021年8月31号 
+      // Date(2021,7,30+10) 返回出来是 距离2021年8月30号过去十天后的日期
+      const startTime = this.data.startTime.split("-");
+      const weekMonday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) + (weekNow-1)*7);
+      const weekTuesday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +1 + (weekNow-1)*7);
+      const weekWednesday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +2 + (weekNow-1)*7);
+      const weekThursday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +3 + (weekNow-1)*7);
+      const weekFriday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +4 + (weekNow-1)*7);
+      const weekSaturday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +5 + (weekNow-1)*7);
+      const weekSunday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +6 + (weekNow-1)*7);
+      this.setData({
+        arr:{
+          month:[
+            weekMonday.getMonth()+1,
+            weekTuesday.getMonth()+1,
+            weekWednesday.getMonth()+1,
+            weekThursday.getMonth()+1,
+            weekFriday.getMonth()+1,
+            weekSaturday.getMonth()+1,
+            weekSunday.getMonth()+1,
+          ],
+          date:[
+            weekMonday.getDate(),
+            weekTuesday.getDate(),
+            weekWednesday.getDate(),
+            weekThursday.getDate(),
+            weekFriday.getDate(),
+            weekSaturday.getDate(),
+            weekSunday.getDate(),
+          ],
+        },
+      })
+    }
+
+    InitStartTime();
+    getWeekNow();
+    linkWeekAndTime(this.data.weekNow);
   },
 
   // 2.控制翻页总函数
@@ -224,6 +234,20 @@ Page({
   },
   
   // 4. 排课操作总函数
+  modulee() {
+    const isEdit = () => {                                // 进入编辑模式，点击事件触发
+      this.setData({
+        editing:!this.data.editing
+      })
+      if(this.data.editing){
+        wx.showToast({
+          title: '再次点击取消',
+          icon:'none',
+          duration:1000
+        })
+      }
+    }
+  },
   isEdit(){                                // 进入编辑模式，点击事件触发
     this.setData({
       editing:!this.data.editing
@@ -295,10 +319,7 @@ Page({
           }
           scheduleAll.push(newScheduleObj);
           schedule.push(newScheduleObj)
-          that.setData({
-            scheduleAll:scheduleAll,
-            schedule:schedule
-          })
+          that.setData({ scheduleAll,schedule })
           wx.setStorageSync('scheduleAll', scheduleAll);   // 更新缓存
         })();
     })
@@ -364,13 +385,12 @@ Page({
   },
   // 7、上课周数的复选按钮
   weekListChoice(options){
-    let that = this;
-    var index = options.currentTarget.dataset.index;
-    var item = that.data.weekList[index];
+    let index = options.currentTarget.dataset.index;
+    let item = this.data.weekList[index];
     item.checked = !item.checked;
     // 更新
-    that.setData({
-      weekList: that.data.weekList
+    this.setData({
+      weekList: this.data.weekList
     });
   },
   // 关闭
@@ -381,23 +401,27 @@ Page({
   },
   // 打开
   addViewOpen(){
+    let that = this;
     this.setData({
       addClass:false
     })
+    util.slideupshow(that, "addToClassView", -600, 1)
   },
   // 添加课表的信息提交
   addViewSubmmit(e){
     let that = this;
     let addClassMsg = e.detail.value;
     let weekList = [];
-    for(let x in that.data.weekList){
-      if(that.data.weekList[x].checked){
-        weekList.push(Number(x)+1);
-      }
-      // 还原用于表单清零
-      that.data.weekList[x].checked = false;
-    }
-    if(weekList == '' || addClassMsg.classMaster == '' || addClassMsg.className == '' || addClassMsg.classRoom == ''){
+    
+    that.data.weekList.map(item => {
+      item.checked ? weekList.push(Number(item)+1) : '';
+      item.checked = false;      // 还原用于表单清零
+    })
+
+    if(weekList == '' || 
+    addClassMsg.classMaster == '' || 
+    addClassMsg.className == '' || 
+    addClassMsg.classRoom == ''){
       wx.showToast({
         title: '请填写完整！',
         icon:'none',

@@ -48,17 +48,18 @@
 /* 添加课表框 */
 .addToClassView{
    position: absolute;
-   bottom: 0;
+   bottom: -600px;
    width: 100vw;
-   height: 80%;
+   height: 90%;
    z-index: 999;
    border-top-right-radius: 55rpx;
    border-top-left-radius: 55rpx;
    padding: 30rpx;
-   text-align: center;
+   /* text-align: center; */
    font-size: 30rpx;
    box-sizing: border-box;
    background-color: #fff;
+   opacity: 0;
 }
 /* 添加课表框内容 */
 .classMsgBox{
@@ -71,12 +72,13 @@
    padding:0 60rpx 0 60rpx ;
    margin: 30rpx 0 30rpx 0;
 }
-
 .classInput{
    width: 400rpx;
 }
 
 .addClassTitle{
+   display: flex;
+   justify-content: center;
    margin: 25rpx;
    font-weight: 700;
 }
@@ -84,11 +86,13 @@
 .chioceBox{
    display: flex;
    width: 50%;
-   justify-content: space-around;
+   justify-content: space-between;
+   margin-right: 20rpx;
 }
 
 .chioceBox:nth-child(2){
-   border-left: 2rpx solid #c7c7c7;
+   padding-left: 20rpx;
+   border-left:solid 2rpx #c7c7c7;
 }
 .weeks{
    display: flex;
