@@ -12,6 +12,45 @@
       <view class="editor" catchtap="isEdit">
          <van-icon name="setting" color="#99CCFF" size="50rpx"/>
       </view>
+      <view class="addTo" catchtap="addViewOpen">
+         <van-icon name="plus" size="50rpx"/>
+      </view>
+   </view>
+   <!-- 添加课表 -->
+   <view class="viewCover" hidden="{{addClass}}">
+      <view class="addToClassView">
+         <form bindsubmit="addViewSubmmit">
+            <view class="addClassTitle">课程详情</view>
+            <view class="classMsgBox" wx:for="{{classMsg}}" wx:key='index'>
+               <view>{{item.text}}</view>
+               <input class="classInput" type="text" name="{{item.key}}" value="{{addClassvalue}}"/>
+            </view>
+            <view class="classMsgBox" >
+               <view class="chioceBox">
+                  星期
+                  <picker bindchange="weekChange" value="{{weekIndex}}" range="{{weekArray}}" name="weekNum"> 
+                        {{weekArray[weekIndex]}}
+                  </picker>
+               </view>
+               <view class="chioceBox">
+                  节数
+                  <picker bindchange="sectionChange" value="{{sectionIndex}}" range="{{sectionArray}}" name="sectionNum"> 
+                        {{sectionArray[sectionIndex]}}
+                  </picker>
+               </view>
+            </view>
+            <view class="addClassTitle">上课周数</view>
+            <view class="weeks">
+               <button wx:for="{{weekList}}" wx:key="*this" data-index="{{index}}" class="weekItem {{item.checked ? 'weekItemActive' : ''}}" bindtap="weekListChoice">{{index+1}}</button>
+            </view>
+            <view class="addViewButton">
+               <button class="addViewClose" bindtap="addViewClose">关闭</button>
+               <button form-type="submit" class="addViewSubmmit">
+                  保存
+               </button>
+            </view>
+         </form>
+      </view>
    </view>
    <!-- 滑块 -->
    <view bindtouchstart="touchStart"  bindtouchmove="touchMove" bindtouchend="touchEnd" >
