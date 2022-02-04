@@ -255,6 +255,7 @@ Page({
     let scheduleAll = wx.getStorageSync('scheduleAll');
     let schedule = this.data.schedule;
     const page = this.data.weekNow;
+    
     db.collection('schedule').add({
       data:{
         index: that.data.place,
