@@ -62,7 +62,19 @@ Page({
     index:'',          // 课表变色的随机数
     
     editing:false,     // 进入编辑模式
-    hasUserInfo:false
+    hasUserInfo:false,
+    addClass:true,    //添加课表
+    classMsg:[
+      {text:'*课程名',key:'className'},
+      {text:'教室',key:'classRoom'},
+      {text:'教师',key:'classMaster'},
+    ],
+    weekArray: ['一', '二', '三', '四','五','六','日'],
+    weekIndex:0,
+    sectionArray: ['1-2','3-4','5-6','7-8','9-10'],
+    sectionIndex:0,
+    weekList:[{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},{checked: false},],
+    
   },
   // 1.控制时间的总函数
   InitTime(){
@@ -338,7 +350,71 @@ Page({
       }
     })
   },
-  
+  // 6、滚动选择器
+  weekChange(e) {
+    this.setData({
+      weekIndex: e.detail.value
+    })
+  },
+  sectionChange(e){
+    this.setData({
+      sectionIndex: e.detail.value
+    })
+  },
+  // 7、上课周数的复选按钮
+  weekListChoice(options){
+    let that = this;
+    var index = options.currentTarget.dataset.index;
+    var item = that.data.weekList[index];
+    item.checked = !item.checked;
+    // 更新
+    that.setData({
+      weekList: that.data.weekList
+    });
+  },
+  // 关闭
+  addViewClose(){
+    this.setData({
+      addClass:true
+    })
+  },
+  // 打开
+  addViewOpen(){
+    this.setData({
+      addClass:false
+    })
+  },
+  // 添加课表的信息提交
+  addViewSubmmit(e){
+    let that = this;
+    let addClassMsg = e.detail.value;
+    let weekList = [];
+    for(let x in that.data.weekList){
+      if(that.data.weekList[x].checked){
+        weekList.push(Number(x)+1);
+      }
+      // 还原用于表单清零
+      that.data.weekList[x].checked = false;
+    }
+    if(weekList == '' || addClassMsg.classMaster == '' || addClassMsg.className == '' || addClassMsg.classRoom == ''){
+      wx.showToast({
+        title: '请填写完整！',
+        icon:'none',
+        duration:1000
+      })
+      return;
+    }
+    console.log(addClassMsg);
+    console.log(`上课周数:${weekList}`);
+    // 表单清零
+    this.setData({
+      addClass:true,
+      addClassvalue:'',
+      weekList:that.data.weekList,
+      sectionIndex:0,
+      weekIndex:0
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
