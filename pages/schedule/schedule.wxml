@@ -1,12 +1,11 @@
 <view class="container">
    <!-- 头部 -->
    <view class="header">
-      <view class="imgBtn" bindtap="lastWeek">
-         <image src="../../images/btn_prev@2x.png"/>
-      </view>
-      <text class="headerText">第{{weekNow}}周</text>
-      <view class="imgBtn" bindtap="nextWeek" >
-         <image src="../../images/btn_next@2x.png"/>
+      <view class="headerTitle" bindtap="showDotScroll">
+         <text class="headerText">第 {{weekNow}} 周</text>
+         <view class="imgBtn">
+            <image src="../../images/down.png"/>
+         </view>
       </view>
       <!-- 是否进入编辑模式 -->
       <view class="editor" catchtap="isEdit">
@@ -52,6 +51,18 @@
          </form>
       </view>
    </view>
+   <!-- 显示小绿点 -->
+   <scroll-view class="greenDotScroll" scroll-x="true" scroll-into-view="index{{weekNow}}" hidden="{{showDotScroll}}">
+      <view class="dotBox" wx:for="{{dotList}}" wx:key="dotbox" wx:for-index="idx">
+         <view class="{{weekNow == idx+1 ? 'dotBoxClick' : ''}}" data-page="{{idx+1}}" bindtap="dotBoxClick">
+            <view class="weekTxt">第{{idx+1}}周</view>
+
+            <view class="dotContainer">
+               <view class="dot" wx:for="{{item}}" wx:key="dot" wx:for-item="dot" style="background-color:{{dot ? 'rgb(56,201,153)' : '#D4D4D4'}} ;"></view>
+            </view>
+         </view>
+      </view>
+   </scroll-view>
    <!-- 滑块 -->
    <view bindtouchstart="touchStart"  bindtouchmove="touchMove" bindtouchend="touchEnd" >
       <scroll-view class="scroll">
@@ -103,7 +114,9 @@
                   style="left: {{(item.width-1)*100}}rpx; top: {{(item.height-1)*220}}rpx; background-color: {{colorArrays[index]}};"
                   catchtap="{{editing ? 'excelClass' : 'showClassDetail'}}">
                      <view class="scheduleInfo">
-                        <text wx:if="{{item.className && item.classMaster}}"> {{item.className}}@{{item.classMaster}} </text>
+                        <!-- 非快捷占课 -->
+                        <text wx:if="{{item.className && item.classMaster}}" style="word-wrap: break-word;"> {{item.className}}@{{item.classMaster}} </text>
+                        <!-- 快捷占课情况下 -->
                         <text wx:if="{{!item.className && !item.classMaster}}"> 快捷占课@{{item.index}} </text>
                      </view>
                   </view>

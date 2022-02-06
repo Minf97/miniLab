@@ -1,5 +1,6 @@
 /* pages/Schedule.wxss */
 .container {
+   overflow-x: hidden;
    padding: 0;
 }
 .header {
@@ -12,12 +13,57 @@
    padding: 10rpx 0;
 }
 .header text {
-   margin: 0 50rpx;
+   margin-right: 20rpx;
 }
 
-.imgBtn image {
+.greenDotScroll {
+   width: 100%;
+   height: 140rpx;
+   background-color: rgb(237, 237, 237);
+   white-space:nowrap;
+}
+
+.dotBox {
+   display: inline-flex;
+   flex-direction: column;
+   justify-content: center;
+   padding-left: 12rpx;
+   margin-top: 10rpx;
+   width: 120rpx;
+   font-size: 24rpx;
+   text-align: center;
+   border-radius: 15rpx;
+   /* background-color: rgb(188,187,193); */
+}
+.dotBoxClick {
+   border-radius: 15rpx;
+   background-color: rgb(188,187,193);
+}
+.dotBox .dotContainer {
+   width: 110rpx;
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   justify-content: center;
+   margin-left: 5rpx;
+   margin-bottom: 10rpx;
+}
+.weekTxt {
+   margin-bottom: 5rpx;
+   /* margin-top: 5rpx; */
+}
+.dot {
+   width: 13rpx;
+   height: 13rpx;
+   margin: 1.2%;
+   border-radius: 100%;
+}
+.headerTitle .imgBtn {
    display: inline-block;
-   width: 25rpx;
+}
+.headerTitle .imgBtn image {
+   display: inline-block;
+   width: 30rpx;
    height: 30rpx;
    margin-top: 5rpx;
 }
@@ -218,10 +264,12 @@ button::after{
    height: 213rpx;
    border-radius: 15rpx;
    margin: 5rpx 0 5rpx 0;
+   
 }
 .scheduleInfo {
    font-size: 25rpx;
    color: #fff;
    text-align: center;
+   word-wrap: normal;
 }
 

@@ -63,8 +63,8 @@ Page({
     index:'',          // 课表变色的随机数
     
     editing:false,     // 进入编辑模式
-    hasUserInfo:false,
-    addClass:true,    //添加课表
+    showDotScroll:true,  // 显示绿点Scroll
+    addClass:true,     // 添加课表
     classMsg:[
       {text:'*课程名',key:'className'},
       {text:'教室',key:'classRoom'},
@@ -168,19 +168,6 @@ Page({
   },
 
   // 2.控制翻页总函数
-  lastWeek:function(){                     // 点击出现上一星期课表 - 函数
-    this.setData({
-      // 三元表达式判断 weekNow 不能为 0 
-      weekNow: this.data.weekNow - 1 == 0 ? 1 : this.data.weekNow - 1
-    })
-    this.linkWeekAndTime(this.data.weekNow)
-  },
-  nextWeek:function(){                     // 点击出现下一星期课表 - 函数
-    this.setData({
-      weekNow: this.data.weekNow + 1 == 20 ? 19 : this.data.weekNow + 1
-    })
-    this.linkWeekAndTime(this.data.weekNow)
-  },
   touchStart:function(e){
     startX = e.touches[0].pageX; // 获取触摸时的原点
     moveFlag = true;
@@ -416,8 +403,7 @@ Page({
       })
       return;
     }
-    console.log(addClassMsg);
-    console.log(`上课周数:${weekList}`);
+
     const getArr = (addClassMsg,weekList) => {
       const {className, classRoom, classMaster, weekNum, sectionNum} = addClassMsg;
       // weekNum 处理成横坐标，sectionNum 处理成纵坐标
@@ -444,7 +430,7 @@ Page({
       return arr;
     }
     const arr = getArr(addClassMsg,weekList);
-    
+
     this.showLoadingMs(1000)
     wx.cloud.callFunction({
       name:"getSchedule",
@@ -459,11 +445,12 @@ Page({
         duration: 1000
       });
       (function () {                                       // 更新信息
-        let scheduleAll = that.data.scheduleAll;
+        let scheduleAll = wx.getStorageSync('scheduleAll');
         let schedule = that.data.schedule;
         scheduleAll.push(...arr);
         schedule.push(...arr)
         that.setData({ scheduleAll,schedule })
+        console.log(schedule);
         wx.setStorageSync('scheduleAll', scheduleAll);   // 更新缓存
       })();
     })
@@ -495,6 +482,38 @@ Page({
     
     this.InitTime()                 // 控制时间总函数
     this.handleScheduleAll()        // 处理课表总函数
+
+    // 处理的绿色小点点
+    let that = this;
+    (function() {
+      let schedule = that.data.schedule;
+      let dotList = new Array();
+
+      // 遍历得到点点容器
+      for (var i = 0; i < 20; i++) { 
+        dotList[i] = new Array();
+        for (var j = 0; j < 35; j++) {
+          dotList[i][j] = null;
+        }
+      }
+      // 逻辑运算处理得到绿色点点
+      schedule.map(item => {
+        let greenDot = (item.height-1)*7 + (item.width-1)
+        dotList[item.page-1][greenDot] = 1;
+      })
+      that.setData({ dotList })
+    })()
+  },
+  dotBoxClick(e) {
+    this.setData({
+      weekNow:e.currentTarget.dataset.page
+    })
+    this.linkWeekAndTime(this.data.weekNow)
+  },
+  showDotScroll() {
+    this.setData({
+      showDotScroll: !this.data.showDotScroll
+    })
   },
   onShareAppMessage: function () {
     return {
