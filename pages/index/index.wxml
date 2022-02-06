@@ -1,5 +1,6 @@
 
 <view class="container">
+  <button class="buttonTxt" bindtap="getUserProfile">点击获取UserInfo</button>
   <!-- 滑动栏 -->
   <view class="scroll1">
     <scroll-view class="scroll" scroll-x="true" bindscroll="scroll" >

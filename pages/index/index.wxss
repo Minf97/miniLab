@@ -6,6 +6,10 @@ page {
 .container {
   padding: 10rpx 10rpx;
 }
+.buttonTxt {
+  width: 200rpx;
+  height: 200rpx;
+}
 .scroll1{
   position: relative;
   border-radius: 20rpx;

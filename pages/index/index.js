@@ -29,6 +29,7 @@ Page({
 
   // 1.获取数据库信息函数
   getIndexInfo(){
+    let that = this;
     // 1.1请求数据库获取index集合内数据
     db.collection('index').get().then(res => {
       this.setData({
@@ -37,13 +38,18 @@ Page({
       wx.setStorageSync('inform', res.data[0].inform)
     }).catch(console.error)
 
-    // 1.2请求数据库获取schedule集合内数据（课表）
-    db.collection('schedule').get().then(res => {
-      this.setData({
-        scheduleAll:res.data
+    // 1.2 请求数据库获取schedule集合内数据（课表）
+    wx.cloud.callFunction({
+      name:"getSchedule",
+      data:{
+        type:"getSchedule",
+      }
+    }).then(res => {
+      that.setData({
+        scheduleAll:res.result
       });
-      wx.setStorageSync('scheduleAll', res.data)
-      console.log("scheduleAll数据库请求成功", res.data);
+      wx.setStorageSync('scheduleAll', res.result)
+      console.log("scheduleAll数据库请求成功", res.result);
     }).catch(console.error)
   },
   // 2.跳转页面函数
@@ -128,6 +134,14 @@ Page({
       duration:500
     });
   },
+  getUserProfile() {
+    wx.getUserProfile({
+      desc: 'xxxx',
+    }).then(res =>{
+      let userInfo = res.userInfo;
+      wx.setStorageSync('userInfo', userInfo)
+    })
+  },  
   onPullDownRefresh() {
     let that = this;
 

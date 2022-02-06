@@ -1,12 +1,11 @@
 const util = require("../../utils/util");
 
 const app = getApp()
+wx.cloud.init()
+
 var startX, endX;
 var moveFlag = true;
-
-wx.cloud.init()
-const db = wx.cloud.database()
-
+const userInfo = wx.getStorageSync('userInfo');
 
 Page({
   data: {
@@ -37,6 +36,7 @@ Page({
     scheduleAll:[],    // 获取全部课表
     schedule:[],       // 本实验室课表
     labTitle:'',       // 接收实验室名称
+    place: '',         // 接收教室地点
     
     colorArrays: [     // 排课时变色的颜色数组（常量）
       '#99CCFF',
@@ -78,102 +78,93 @@ Page({
     
   },
   // 1.控制时间的总函数
-  InitTime () {
-
-    // 初始化每学期起始时间
-    const InitStartTime = () => {
-      const time = this.data.time;
+  InitTime(){
+    this.InitStartTime();
+    this.getWeekNow();
+    this.linkWeekAndTime(this.data.weekNow);
+  },
+  InitStartTime(){                         // 初始化每学期起始时间
+    const time = this.data.time;
     
-      if(time.month >= 8 || (time.month <= 1 && time.date <= 20)){  // 上学期
-        this.setData({
-          startTime:time.year + "-8-30"
-        })
-      }else {                                                       // 下学期
-        this.setData({
-          startTime:time.year + "-2-28"
-        })
-      };
-      // console.log(this.data.startTime,"初始化学期起始时间")
-    }
-
-    // 计算时间天数差 （不动）
-    const dateDiff = (sDate1,sDate2) => {
-      // sDate1 和 sDate2 必须是2021-8-30格式
-      var aDate, oDate1, oDate2, iDays
-      aDate = sDate1.split("-")
-      // 转换为 8-30-2021 的形式
-      oDate1 = new Date(aDate[1] + '-' + aDate[2] + "-" + aDate[0])
-      aDate = sDate2.split("-")
-      oDate2 = new Date(aDate[1] + '-' + aDate[2] + "-" + aDate[0])
-
-      if(oDate2 < oDate1) {
-        // 如果当前时间小于初始化时间
-        return 1
-      }else {
-        // 把相差的毫秒数转换为天数
-        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 /60 /60 /24);
-        return iDays;
-      }
-    }
-
-    // 得到weekNow 
-    const getWeekNow = () => {
-      const time = this.data.time
-      time.day == 0 ? 7 : time.day
+    if(time.month >= 8 || (time.month <= 1 && time.date <= 20)){  // 上学期
       this.setData({
-        time:time
+        startTime:time.year + "-8-30"
       })
-      const sDate1 = this.data.startTime     // 起始时间
-      const sDate2 = time.year + "-" + time.month + "-" + time.date
-
-      var daysUntilNow = dateDiff(sDate1,sDate2);       // 计算天数差
-      (daysUntilNow/7)%1 == 0 ? daysUntilNow += 1 : '';      // 解决每周一还停留在上一周的BUG
+    }else {                                                       // 下学期
       this.setData({
-        weekNow:Math.ceil(daysUntilNow / 7)  // 向上取整，有小数就加一
+        startTime:time.year + "-2-28"
       })
-      console.log(this.data.weekNow,"计算出weekNow啦");
-    }
+    };
+    // console.log(this.data.startTime,"初始化学期起始时间")
+  },
+  dateDiff:function(sDate1,sDate2){        // 计算时间天数差 （不动）
+    // sDate1 和 sDate2 必须是2021-8-30格式
+    var aDate, oDate1, oDate2, iDays
+    aDate = sDate1.split("-")
+    // 转换为 8-30-2021 的形式
+    oDate1 = new Date(aDate[1] + '-' + aDate[2] + "-" + aDate[0])
+    aDate = sDate2.split("-")
+    oDate2 = new Date(aDate[1] + '-' + aDate[2] + "-" + aDate[0])
 
-    // 将时间startTime与weekNow连接起来
-    const linkWeekAndTime = (weekNow) => {
-      // Date(year,month,date)  
-      // Date(2021,7,31)    返回出来是 2021年8月31号 
-      // Date(2021,7,30+10) 返回出来是 距离2021年8月30号过去十天后的日期
-      const startTime = this.data.startTime.split("-");
-      const weekMonday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) + (weekNow-1)*7);
-      const weekTuesday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +1 + (weekNow-1)*7);
-      const weekWednesday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +2 + (weekNow-1)*7);
-      const weekThursday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +3 + (weekNow-1)*7);
-      const weekFriday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +4 + (weekNow-1)*7);
-      const weekSaturday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +5 + (weekNow-1)*7);
-      const weekSunday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +6 + (weekNow-1)*7);
-      this.setData({
-        arr:{
-          month:[
-            weekMonday.getMonth()+1,
-            weekTuesday.getMonth()+1,
-            weekWednesday.getMonth()+1,
-            weekThursday.getMonth()+1,
-            weekFriday.getMonth()+1,
-            weekSaturday.getMonth()+1,
-            weekSunday.getMonth()+1,
-          ],
-          date:[
-            weekMonday.getDate(),
-            weekTuesday.getDate(),
-            weekWednesday.getDate(),
-            weekThursday.getDate(),
-            weekFriday.getDate(),
-            weekSaturday.getDate(),
-            weekSunday.getDate(),
-          ],
-        },
-      })
+    if(oDate2 < oDate1) {
+      // 如果当前时间小于初始化时间
+      return 1
+    }else {
+      // 把相差的毫秒数转换为天数
+      iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 /60 /60 /24);
+      return iDays;
     }
+  },
+  getWeekNow:function(){                   // 得到weekNow 
+    const time = this.data.time
+    time.day == 0 ? 7 : time.day
+    this.setData({
+      time:time
+    })
+    const sDate1 = this.data.startTime     // 起始时间
+    const sDate2 = time.year + "-" + time.month + "-" + time.date
 
-    InitStartTime();
-    getWeekNow();
-    linkWeekAndTime(this.data.weekNow);
+    var daysUntilNow = this.dateDiff(sDate1,sDate2);       // 计算天数差
+    (daysUntilNow/7)%1 == 0 ? daysUntilNow += 1 : '';      // 解决每周一还停留在上一周的BUG
+    this.setData({
+      weekNow:Math.ceil(daysUntilNow / 7)  // 向上取整，有小数就加一
+    })
+    console.log(this.data.weekNow,"计算出weekNow啦");
+  },
+  linkWeekAndTime:function(weekNow){       // 将时间startTime与weekNow连接起来
+    // Date(year,month,date)  
+    // Date(2021,7,31)    返回出来是 2021年8月31号 
+    // Date(2021,7,30+10) 返回出来是 距离2021年8月30号过去十天后的日期
+    const startTime = this.data.startTime.split("-");
+    const weekMonday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) + (weekNow-1)*7);
+    const weekTuesday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +1 + (weekNow-1)*7);
+    const weekWednesday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +2 + (weekNow-1)*7);
+    const weekThursday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +3 + (weekNow-1)*7);
+    const weekFriday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +4 + (weekNow-1)*7);
+    const weekSaturday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +5 + (weekNow-1)*7);
+    const weekSunday = new Date(startTime[0],parseInt(startTime[1])-1,parseInt(startTime[2]) +6 + (weekNow-1)*7);
+    this.setData({
+      arr:{
+        month:[
+          weekMonday.getMonth()+1,
+          weekTuesday.getMonth()+1,
+          weekWednesday.getMonth()+1,
+          weekThursday.getMonth()+1,
+          weekFriday.getMonth()+1,
+          weekSaturday.getMonth()+1,
+          weekSunday.getMonth()+1,
+        ],
+        date:[
+          weekMonday.getDate(),
+          weekTuesday.getDate(),
+          weekWednesday.getDate(),
+          weekThursday.getDate(),
+          weekFriday.getDate(),
+          weekSaturday.getDate(),
+          weekSunday.getDate(),
+        ],
+      },
+    })
   },
 
   // 2.控制翻页总函数
@@ -234,20 +225,6 @@ Page({
   },
   
   // 4. 排课操作总函数
-  modulee() {
-    const isEdit = () => {                                // 进入编辑模式，点击事件触发
-      this.setData({
-        editing:!this.data.editing
-      })
-      if(this.data.editing){
-        wx.showToast({
-          title: '再次点击取消',
-          icon:'none',
-          duration:1000
-        })
-      }
-    }
-  },
   isEdit(){                                // 进入编辑模式，点击事件触发
     this.setData({
       editing:!this.data.editing
@@ -260,13 +237,20 @@ Page({
       })
     }
   },
+  showClassDetail(){
+    wx.showToast({
+      title: `教师：${userInfo.nickName}\n地点：${this.data.place}`,
+      icon: "none",
+      duration: 1000
+    })
+  },
   arrange(e){                              // 编辑模式下，排课操作函数，点击事件触发
     // 点击后传参
     const height =  e.currentTarget.dataset.height
     const width =  e.currentTarget.dataset.width
     const date = this.data.arr.month[width-1] + "." + this.data.arr.date[width-1]
 
-    this.showLoadingMs(200);
+    this.showLoadingMs(1000);
     this.controlDatabaseAdd(date,width,height);
     this.changeColor();
   },
@@ -286,42 +270,39 @@ Page({
       wx.hideLoading()
     }, timeMs)
   },
-  controlDatabaseAdd(date,width,height){   // 排课成功，向数据库发送请求 仅arrange()函数引用
+  controlDatabaseAdd(date,width,height){   // 排课成功，向数据库发送请求 仅 arrange()函数引用
     let that = this;
     let scheduleAll = wx.getStorageSync('scheduleAll');
     let schedule = this.data.schedule;
     const page = this.data.weekNow;
     
-    db.collection('schedule').add({
+    const newScheduleObj = {
+      index: that.data.place,
+      title: that.data.labTitle,
+      date: date,
+      page: page,
+      width: width,
+      height: height
+    }
+    const arr = [newScheduleObj]
+    wx.cloud.callFunction({
+      name:"getSchedule",
       data:{
-        index: that.data.place,
-        title: that.data.labTitle,
-        date: date,
-        page: page,
-        width: width,
-        height: height
+        type:"addSchedule",
+        arr:arr
       }
-    })
-    .then(res => {
-        console.log(res,"存储数据库数据成功");
-        wx.showToast({
-          title: '排课成功',
-          duration:1000
-        });
-        (function () {                                       // 更新信息
-          let newScheduleObj = {
-            index: that.data.place,
-            title: that.data.labTitle,
-            date: date,
-            page: page,
-            width: width,
-            height: height
-          }
-          scheduleAll.push(newScheduleObj);
-          schedule.push(newScheduleObj)
-          that.setData({ scheduleAll,schedule })
-          wx.setStorageSync('scheduleAll', scheduleAll);   // 更新缓存
-        })();
+    }).then(res => {
+      console.log(res,"存储成功");
+      wx.showToast({
+        title: '排课成功',
+        duration: 1000
+      });
+      (function () {                                       // 更新信息
+        scheduleAll.push(newScheduleObj);
+        schedule.push(newScheduleObj)
+        that.setData({ scheduleAll,schedule })
+        wx.setStorageSync('scheduleAll', scheduleAll);   // 更新缓存
+      })();
     })
   },
 
@@ -330,47 +311,53 @@ Page({
     const height =  e.currentTarget.dataset.height
     const width =  e.currentTarget.dataset.width
 
-    this.showLoadingMs(200);
+    this.showLoadingMs(1000);
     this.controlDatabaseDel(width,height);
   },
-  controlDatabaseDel(width,height){        // 取消排课时，将数据库内信息删除 仅excelClass() 内部引用
+  // 取消排课时，将数据库内信息删除 仅excelClass() 内部引用
+  controlDatabaseDel(width,height){
+    let that = this;
     const page = this.data.weekNow;
-    const schedule = this.data.schedule;
-    schedule.where({
-        index: this.data.labTitle,
+    const title = this.data.labTitle;
+
+    wx.cloud.callFunction({
+      name:"getSchedule",
+      data:{
+        type:"delSchedule",
+        title:title,
         page:page,
         width:width,
         height:height
-    })
-    .remove({
-      success:function(res){
-        console.log(res.data,"删除数据库数据成功");
-        wx.showLoading({
-          title: '处理中...',
+      }
+    }).then(res => {
+      console.log(res,"删除数据库数据成功");
+      wx.showToast({
+        title: '删除成功',
+        duration: 1000
+      });
+      
+      // 删除成功后更新缓存
+      (function(title,page,width,height){
+        const schedule = that.data.schedule;
+        const scheduleAll = that.data.scheduleAll;
+
+        schedule.forEach((item,index,arr) => {
+          if(item.page == page && item.width == width && item.height == height) {
+            arr.splice(index,1)
+            console.log(arr);
+          }
         })
-        setTimeout(function(){
-          wx.hideLoading({
-            success: (res) => {
-              wx.showToast({
-                title: '删除成功',
-                icon: 'success',
-                duration: '800',
-              })
-            },
-          })
+        scheduleAll.forEach((item,index,arr) => {
+          if(item.title == title && item.page == page && item.width == width && item.height == height) {
+            arr.splice(index,1)
+          }
         })
 
-        // 删除数据库课表时，同时删除schedule内课表 仅controlDatabaseDel() 内部引用
-        (function(page,width,height){
-          const schedule = this.data.schedule;
-          schedule.forEach(function(item,index,arr) {
-            if(item.page == page && item.width == width && item.height == height) {
-              arr.splice(index,1)
-            }
-          })
-        })()
-      }
+        that.setData({ schedule,scheduleAll });
+        wx.setStorageSync('scheduleAll', scheduleAll);
+      })(title,page,width,height)
     })
+    
   },
   // 6、滚动选择器
   weekChange(e) {
@@ -398,14 +385,14 @@ Page({
     this.setData({
       addClass:true
     })
+    util.slideupshow(this, "addToClassView", 600, 0)     // 动效
   },
   // 打开
   addViewOpen(){
-    let that = this;
     this.setData({
       addClass:false
     })
-    util.slideupshow(that, "addToClassView", -600, 1)
+    util.slideupshow(this, "addToClassView", -600, 1)     // 动效
   },
   // 添加课表的信息提交
   addViewSubmmit(e){
@@ -414,7 +401,7 @@ Page({
     let weekList = [];
     
     that.data.weekList.map(item => {
-      item.checked ? weekList.push(Number(item)+1) : '';
+      item.checked ? weekList.push(Number(that.data.weekList.indexOf(item))+1) : '';
       item.checked = false;      // 还原用于表单清零
     })
 
@@ -431,6 +418,56 @@ Page({
     }
     console.log(addClassMsg);
     console.log(`上课周数:${weekList}`);
+    const getArr = (addClassMsg,weekList) => {
+      const {className, classRoom, classMaster, weekNum, sectionNum} = addClassMsg;
+      // weekNum 处理成横坐标，sectionNum 处理成纵坐标
+      const width = Number(weekNum)+1;
+      const height = Number(sectionNum)+1;
+      const date = that.data.arr.month[width-1] + "." + that.data.arr.date[width-1]
+
+      let arr = [];
+      weekList.map(item => {
+        let obj = {
+          index: that.data.place,
+          title: that.data.labTitle,
+          date: date,
+          page: '',
+          width: width,
+          height: height,
+          className: className,
+          classMaster: classMaster
+        };
+        obj["page"] = Number(item);
+        arr.push(obj);
+      })
+      console.log(arr,233);
+      return arr;
+    }
+    const arr = getArr(addClassMsg,weekList);
+    
+    this.showLoadingMs(1000)
+    wx.cloud.callFunction({
+      name:"getSchedule",
+      data:{
+        type:"addSchedule",
+        arr:arr
+      }
+    }).then(res => {
+      console.log(res,"存储成功");
+      wx.showToast({
+        title: '排课成功',
+        duration: 1000
+      });
+      (function () {                                       // 更新信息
+        let scheduleAll = that.data.scheduleAll;
+        let schedule = that.data.schedule;
+        scheduleAll.push(...arr);
+        schedule.push(...arr)
+        that.setData({ scheduleAll,schedule })
+        wx.setStorageSync('scheduleAll', scheduleAll);   // 更新缓存
+      })();
+    })
+
     // 表单清零
     this.setData({
       addClass:true,
@@ -448,7 +485,8 @@ Page({
       try {
         this.setData({
           labTitle:options.name,
-          place: options.place
+          place: options.place,
+          userInfo
         });
       } catch (e){
         console.log(e);

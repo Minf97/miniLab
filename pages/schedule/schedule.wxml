@@ -9,7 +9,7 @@
          <image src="../../images/btn_next@2x.png"/>
       </view>
       <!-- 是否进入编辑模式 -->
-      <view class="editor" catchtap="{{modulee.isEdit}}">
+      <view class="editor" catchtap="isEdit">
          <van-icon name="setting" color="#99CCFF" size="50rpx"/>
       </view>
       <view class="addTo" catchtap="addViewOpen">
@@ -101,10 +101,10 @@
                   data-height="{{item.height}}"
                   data-width="{{item.width}}"
                   style="left: {{(item.width-1)*100}}rpx; top: {{(item.height-1)*220}}rpx; background-color: {{colorArrays[index]}};"
-                  catchtap="excelClass">
+                  catchtap="{{editing ? 'excelClass' : 'showClassDetail'}}">
                      <view class="scheduleInfo">
-                     <text wx:if="{{item.page == weekNow}}"> 123 </text>
-                        <open-data type="userNickName"></open-data>
+                        <text wx:if="{{item.className && item.classMaster}}"> {{item.className}}@{{item.classMaster}} </text>
+                        <text wx:if="{{!item.className && !item.classMaster}}"> 快捷占课@{{item.index}} </text>
                      </view>
                   </view>
                </block>
