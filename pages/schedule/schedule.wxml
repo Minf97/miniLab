@@ -52,8 +52,8 @@
       </view>
    </view>
    <!-- 显示小绿点 -->
-   <scroll-view class="greenDotScroll" scroll-x="true" scroll-into-view="index{{weekNow}}" hidden="{{showDotScroll}}">
-      <view class="dotBox" wx:for="{{dotList}}" wx:key="dotbox" wx:for-index="idx">
+   <scroll-view class="greenDotScroll" fast-deceleration="true" scroll-with-animation="true" scroll-x="true" scroll-into-view="index{{weekNow}}" hidden="{{showDotScroll}}">
+      <view id="index{{idx+3}}" class="dotBox" wx:for="{{dotList}}" wx:key="dotbox" wx:for-index="idx">
          <view class="{{weekNow == idx+1 ? 'dotBoxClick' : ''}}" data-page="{{idx+1}}" bindtap="dotBoxClick">
             <view class="weekTxt">第{{idx+1}}周</view>
 
@@ -93,7 +93,7 @@
             <view  class="scheduleContain" >
                <!-- 编辑模式下 -->
                <block wx:if="{{editing}}">
-                  <block class="schedule_row" wx:for="{{[0,1,2,3,4]}}" wx:for-item="i" wx:key="index">
+                  <block class="schedule_row" wx:for="{{[0,1,2,3,4]}}" wx:for-item="i" wx:key="indexKey">
                      <block class="schedule_line" wx:for="{{[0,1,2,3,4,5,6]}}" wx:for-item="j" wx:key="item">
                         <view class="schedule"
                         data-height="{{i+1}}"
